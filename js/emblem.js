@@ -2227,9 +2227,9 @@ EMB.data.images.iw.materials = [
 // WWII
 
 //EMB.data.images.wwii.materialsRoot = "https://my.callofduty.com/content/dam/atvi/callofduty/mycod/emblems/wwii/materials/";
-EMB.data.images.wwii.materialsRoot = "/emblems/img/materials/";
+EMB.data.images.wwii.materialsRoot = "img/materials/";
 //EMB.data.images.wwii.iconsRoot = "https://my.callofduty.com/content/dam/atvi/callofduty/mycod/emblems/wwii/icons/";
-EMB.data.images.wwii.iconsRoot = "/emblems/img/icons/";
+EMB.data.images.wwii.iconsRoot = "img/icons/";
 
 EMB.data.images.wwii.icons = [ 
     // 0,
