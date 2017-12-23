@@ -45,7 +45,7 @@ img {
                     </div>
                   </div>
                 </div>
-                <small>Share: <a href="" id="shareEmblem"></a></small>
+                <small id="shareMessage" class="d-none">Share: <a href="" id="shareEmblem"></a></small>
                 <div id="error" class="alert alert-danger alert-dismissible fade collapse" style="margin-top: 5px" role="alert">
                   No emblem data found!
                 </div>
@@ -97,6 +97,7 @@ it's not all required for the emblem rendering, but i didn't feel like messing w
 let currentEmblems = {};
 function displayEmblems(username, platform) {
     $("#error").removeClass("show");
+    $("#shareMessage").addClass("d-none");
     //hack to keep this project client-side only
     //there might be better ways to go about this, but it works for now.
     $.getJSON("//www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
@@ -121,8 +122,9 @@ function displayEmblems(username, platform) {
             var context = EMB.createRenderContext("wwii", canvas, json.data[i]);
             EMB.drawEmblem(context, false); //slow!!
         }
-        $("#shareEmblem").href = buildShareURL(username, platform);
+        $("#shareEmblem").attr('href', buildShareURL(username, platform));
         $("#shareEmblem").text(buildShareURL(username, platform));
+        $("#shareMessage").removeClass("d-none");
     });
 }
 
