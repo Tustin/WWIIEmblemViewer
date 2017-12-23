@@ -94,7 +94,7 @@ function displayEmblems(username, platform) {
     $("#error").removeClass("show");
     //hack to keep this project client-side only
     //there might be better ways to go about this, but it works for now.
-    $.getJSON("http://www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
+    $.getJSON("//www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
         json = JSON.parse(json.contents);
         console.log(json);
         if (json.data.length === 0) {
