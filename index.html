@@ -1,0 +1,128 @@
+<head>
+    <title>WWII Emblem Viewer</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.2/css/all.css" rel="stylesheet">
+</head>
+<style>
+body {
+    background-color: #ddd;
+    padding-top: 90px;
+}
+img {
+    max-width:64px;
+    max-height:64px;
+    width:auto;
+    height:auto;
+}
+</style>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-brand" src="img/wwii.png" alt="logo">
+            Emblem Viewer
+        </a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="//twitter.com/Tusticles"><i class="fab fa-twitter"></i></a>
+            </li>
+            <li class="navbar-item">
+              <a class="nav-link" href="//github.com/Tustin/WWIIEmblemViewer"><i class="fab fa-github"></i></a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="username" placeholder="username">
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item" onclick="searchUsername('psn')">PSN</a>
+                      <a class="dropdown-item" onclick="searchUsername('xbl')">XBL</a>
+                      <!--<a class="dropdown-item" onclick="searchUsername('steam')">Steam</a>-->
+                    </div>
+                  </div>
+                </div>
+                <div id="error" class="alert alert-danger alert-dismissible fade collapse" style="margin-top: 5px" role="alert">
+                  No emblem data found!
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div id="emblems" style="margin-top: 10px">
+        </div>
+        <div class="modal fade" id="code-modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h4 class="modal-title">Copy Emblem</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                <textarea class="form-control" rows="5" id="code"></textarea>
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+    </div>
+</body>
+
+<script src="js/jquery.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<!-- 
+this code is just ripped straight from the callofduty website
+it's not all required for the emblem rendering, but i didn't feel like messing with their code
+-->
+<script src="js/base.js"></script>
+<script src="js/emblem.js"></script>
+<script>
+//dictionary of the current emblems to allow for copying emblem data.
+let currentEmblems = {};
+function displayEmblems(username, platform) {
+    $("#error").removeClass("show");
+    //hack to keep this project client-side only
+    //there might be better ways to go about this, but it works for now.
+    $.getJSON("http://www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
+        json = JSON.parse(json.contents);
+        console.log(json);
+        if (json.data.length === 0) {
+            $("#error").addClass("show");
+        }
+        currentEmblems = {};
+        $("#emblems").empty();
+        for (var i = 0; i < json.data.length; i++) {
+            var canvas = document.createElement('canvas');
+            canvas.id = json.data[i].filename;
+            canvas.width = 238;
+            canvas.height = 238;
+            canvas.addEventListener('click', canvasCallback, false);
+
+            currentEmblems[json.data[i].filename] = json.data[i];   //create a dictionary for fast searching
+            $("#emblems").append(canvas);
+
+            var context = EMB.createRenderContext("wwii", canvas, json.data[i]);
+            EMB.drawEmblem(context, false); //slow!!
+        }
+    });
+}
+
+function searchUsername(platform) {
+    let name = $("#username").val();
+    displayEmblems(name, platform);
+}
+function canvasCallback(event) {
+    //
+}
+</script>
