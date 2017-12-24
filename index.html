@@ -14,6 +14,11 @@ img {
     width:auto;
     height:auto;
 }
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }
 </style>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -54,7 +59,7 @@ img {
         </div>
         <div class="row">
             <div class="col-md-2"></div>
-            <div id="emblems" class="col-md-8" style="margin-top: 10px"></div>
+            <div class="col-md-8" style="margin-top: 10px"><img id="loading" class="center-block d-none" src="load.svg" alt="Loading..."><div id="emblems"></div></div>
             <div class="col-md-2"></div>
         </div>
 
@@ -96,19 +101,21 @@ it's not all required for the emblem rendering, but i didn't feel like messing w
 //dictionary of the current emblems to allow for copying emblem data.
 let currentEmblems = {};
 function displayEmblems(username, platform) {
+    $("#emblems").empty();
     $("#error").removeClass("show");
     $("#shareMessage").addClass("d-none");
+    $("#loading").removeClass("d-none");
     //hack to keep this project client-side only
     //there might be better ways to go about this, but it works for now.
     $.getJSON("//www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
         json = JSON.parse(json.contents);
         //console.log(json);
+        $("#loading").addClass("d-none");
         if (json.data.length === 0) {
             $("#error").addClass("show");
             return;
         }
         currentEmblems = {};
-        $("#emblems").empty();
         for (var i = 0; i < json.data.length; i++) {
             var canvas = document.createElement('canvas');
             canvas.id = json.data[i].filename;
@@ -134,7 +141,7 @@ function buildShareURL(username, platform) {
 
 function searchUsername(platform) {
     let name = $("#username").val();
-    displayEmblems(name, platform);
+    if (name) displayEmblems(name, platform);
 }
 
 function canvasCallback(event) {
@@ -158,5 +165,11 @@ var params = getUrlVars();
 if (params.length === 2 && params['name'] && params['platform']) {
         displayEmblems(params['name'], params['platform']);
 } 
+
+$('#username').on('keydown', function(e) {
+    if (e.which == 13) {
+        searchUsername("psn");
+    }
+});
 
 </script>
