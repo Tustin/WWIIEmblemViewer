@@ -129,8 +129,9 @@ function displayEmblems(username, platform) {
             var context = EMB.createRenderContext("wwii", canvas, json.data[i]);
             EMB.drawEmblem(context, false); //slow!!
         }
-        $("#shareEmblem").attr('href', buildShareURL(username, platform));
-        $("#shareEmblem").text(buildShareURL(username, platform));
+        let shareURL = buildShareURL(username, platform);
+        $("#shareEmblem").attr('href', shareURL);
+        $("#shareEmblem").text(shareURL);
         $("#shareMessage").removeClass("d-none");
     });
 }
@@ -162,8 +163,8 @@ function getUrlVars() {
 }
 
 var params = getUrlVars();
-if (params.length === 2 && params['name'] && params['platform']) {
-        displayEmblems(params['name'], params['platform']);
+if (params.length === 2 && params['username'] && params['platform']) {
+        displayEmblems(params['username'], params['platform']);
 } 
 
 $('#username').on('keydown', function(e) {
