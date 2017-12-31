@@ -105,10 +105,7 @@ function displayEmblems(username, platform) {
     $("#error").removeClass("show");
     $("#shareMessage").addClass("d-none");
     $("#loading").removeClass("d-none");
-    //hack to keep this project client-side only
-    //there might be better ways to go about this, but it works for now.
-    $.getJSON("//www.whateverorigin.org/get?url=" + encodeURIComponent("https://profile.callofduty.com/cod/emblems/wwii/" + platform + "/gamer/" + username + "/") + '&callback=?', function(json) {
-        json = JSON.parse(json.contents);
+    $.getJSON("https://emblem-grabber.herokuapp.com/?username=" + username +"&platform=" + platform, function(json) {
         //console.log(json);
         $("#loading").addClass("d-none");
         if (json.data.length === 0) {
